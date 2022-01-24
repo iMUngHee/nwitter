@@ -1,5 +1,6 @@
-import { dbService } from "fbInstance";
+import { dbService, storageService } from "fbInstance";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
 import React from "react";
 import { useState } from "react/cjs/react.development";
 
@@ -12,20 +13,23 @@ const Nweet = ({ nweetObj, isOwner }) => {
     console.log(ok);
     if (ok) {
       await deleteDoc(nweetTextRef);
+      await deleteObject(ref(storageService, nweetObj.attachmentUrl));
     }
   };
   const toggleEditing = () => setEditing((prev) => !prev);
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     await updateDoc(nweetTextRef, {
       text: newNweet,
     });
     setEditing(false);
-  }
-  const onChange = e => {
-    const {target: {value}} = e;
+  };
+  const onChange = (e) => {
+    const {
+      target: { value },
+    } = e;
     setNweNweet(value);
-  }
+  };
   return (
     <div>
       {editing ? (
@@ -45,6 +49,14 @@ const Nweet = ({ nweetObj, isOwner }) => {
       ) : (
         <>
           <h4>{nweetObj.text}</h4>
+          {nweetObj.attachmentUrl && (
+            <img
+              alt="img"
+              src={nweetObj.attachmentUrl}
+              width={"50px"}
+              height={"50px"}
+            />
+          )}
           {isOwner && (
             <>
               <button onClick={onDeleteClick}>Delete Nweet</button>
