@@ -1,7 +1,7 @@
 import { authService } from "fbInstance";
 import { useEffect, useState } from "react";
 import Router from "components/Router";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, updateProfile } from "firebase/auth";
 
 function App() {
   const [init, setInit] = useState(false);
@@ -9,16 +9,38 @@ function App() {
   useEffect(() => {
     onAuthStateChanged(authService, (user) => {
       if (user) {
-        setUserObj(user);
+        setUserObj({
+          displayName: user.displayName,
+          uid: user.uid,
+          updateProfile: (args) =>
+            updateProfile(user, { displayName: user.displayName }),
+        });
       } else {
         setUserObj(null);
       }
       setInit(true);
     });
   }, []);
+  const refreshUser = () => {
+    const user = authService.currentUser;
+    setUserObj({
+      displayName: user.displayName,
+      uid: user.uid,
+      updateProfile: () =>
+        updateProfile(user, { displayName: user.displayName }),
+    });
+  };
   return (
     <>
-      {init ? <Router isLoggedIn={Boolean(userObj)} userObj={userObj} /> : "Initializing" }
+      {init ? (
+        <Router
+          refreshUser={refreshUser}
+          isLoggedIn={Boolean(userObj)}
+          userObj={userObj}
+        />
+      ) : (
+        "Initializing"
+      )}
     </>
   );
 }

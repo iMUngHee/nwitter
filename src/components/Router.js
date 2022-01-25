@@ -5,15 +5,18 @@ import Home from "routes/Home";
 import Navigation from "components/Navigation";
 import Profile from "routes/Profile";
 
-const Router = ({ isLoggedIn, userObj }) => {
+const Router = ({ refreshUser, isLoggedIn, userObj }) => {
   return (
     <HashRouter>
-      {isLoggedIn && <Navigation />}
+      {isLoggedIn && <Navigation userObj={userObj} />}
       <Routes>
         {isLoggedIn ? (
           <>
             <Route path="/" element={<Home userObj={userObj} />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route
+              path="/profile"
+              element={<Profile refreshUser={refreshUser} userObj={userObj} />}
+            />
           </>
         ) : (
           <>
