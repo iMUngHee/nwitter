@@ -3,7 +3,7 @@ import NweetFactory from "components/NweetFactory";
 import { dbService } from "fbInstance";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import React, { useEffect } from "react";
-import { useState } from "react/cjs/react.development";
+import { useState } from "react";
 
 const Home = ({ userObj }) => {
   const [nweets, setNweets] = useState([]);

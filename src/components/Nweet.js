@@ -4,7 +4,7 @@ import { dbService, storageService } from "fbInstance";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import React from "react";
-import { useState } from "react/cjs/react.development";
+import { useState } from "react";
 
 const Nweet = ({ nweetObj, isOwner }) => {
   const [editing, setEditing] = useState(false);
